@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Objetos Geometry en THREE.js</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script type="module">
+			import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+			//Creates scene and camera
+
+
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+
+			//Creates renderer and adds it to the DOM
+
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+
+
+			//geometria de las figuras
+			var geometry = new THREE.BoxGeometry( 3,3 , 3);//cubo
+            var geometry_s= new THREE.SphereGeometry(5, 30, 20);//esfera
+            var geometry_c=new THREE.ConeGeometry(5,10,15)//cono
+			//Para el material (Ademas se agrega el color)
+			var material = new THREE.MeshMatcapMaterial( { color: 0xFF0000 } );
+            var material_Sphere=new THREE.MeshNormalMaterial( {color: 0x00FF00})
+            var material_Cono=new THREE.MeshLambertMaterial( {color: 0xFF0000})
+			//Applies material to BoxGeometry
+			var cube = new THREE.Mesh( geometry, material );//cubo
+            var esfera=new THREE.Mesh(geometry_s,material_Sphere);
+            var cono= new THREE.Mesh(geometry_c,material_Cono)
+			
+            //Agrgar a la escena
+			scene.add( cube );
+            scene.add(esfera);
+            scene.add(cono)
+
+            //ILUMINACION. pointLight
+            var pointColor = "#ccffcc";
+            var pointLight = new THREE.PointLight(pointColor);
+            pointLight.distance = 120; // distancia de luz
+            pointLight.position.set (15, 32, 80); // posición
+            pointLight.intensity = 10; // intensidad de la luz
+            pointLight.visible = true;
+            
+            scene.add(pointLight)
+
+            
+
+
+			//zoom de la camara
+
+
+			camera.position.z = 22;
+
+
+			//Renderizar
+			var delta = 0.005;
+			
+			function renderiza() {
+			  
+              esfera.position.x = -15;
+              cono.position.x = 15;
+                requestAnimationFrame( renderiza );
+			 
+			  cube.rotation.x -= 2*delta; //ROTACION DEL CUBO
+			  
+
+              esfera.rotation.y -= 2*delta;//ROTACION DE LA ESFERA
+			  
+
+              cono.rotation.x -=2*delta;// ROTACION DEL CONO
+
+			  
+			  
+			  renderer.render( scene, camera );
+			}
+			renderiza();
+</script>
+</body>
+</html>
